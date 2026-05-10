@@ -1,0 +1,6 @@
+merchant_id,total_transactions,total_amount_usd,avg_amount_usd,successful_transactions,failed_transactions,success_rate_%
+M001,3,2340.0,780.0,3,0,100.0
+M002,3,5900.0,1966.6666666666667,3,0,100.0
+M003,1,2100.0,2100.0,1,0,100.0
+M004,2,9700.0,4850.0,2,0,100.0
+M005,1,3300.0,3300.0,0,1,0.0

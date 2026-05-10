@@ -1,0 +1,219 @@
+**Schema (MySQL v5.7)**
+
+    CREATE TABLE transactions (
+        transaction_id      VARCHAR(10) PRIMARY KEY,
+        transaction_date    DATE,
+        merchant_name       VARCHAR(100),
+        default_region      VARCHAR(20),
+        currency            VARCHAR(10),
+        amount              DECIMAL(10,2),
+        status              VARCHAR(50),
+        risk_score          INT,
+        user_id             VARCHAR(10),
+        payment_method      VARCHAR(20),
+        high_value_flag     TINYINT(1),
+        high_risk_flag      TINYINT(1)
+    );
+    INSERT INTO transactions (
+        transaction_id, transaction_date, merchant_name, default_region,
+        currency, amount, status, risk_score, user_id,
+        payment_method, high_value_flag, high_risk_flag
+    ) VALUES
+    ('T001','2026-03-01','Alpha Mart','APAC','USD',4998,'Captured',62,'U001','UPI',0,0),
+    ('T002','2026-03-01','Alpha Mart','APAC','USD',2499,'Captured',55,'U002','Card',0,0),
+    ('T003','2026-03-01','Beta Stores','APAC','USD',6069,'Captured',71,'U003','NetBanking',1,1),
+    ('T004','2026-03-02','Beta Stores','APAC','USD',1920,'Failed E05 Timeout',68,'U004','Card',0,0),
+    ('T005','2026-03-02','Alpha Mart','APAC','USD',4680,'Captured',58,'U001','UPI',0,0),
+    ('T006','2026-03-02','Beta Stores','APAC','USD',3300,'Captured',64,'U005','Wallet',0,0),
+    ('T007','2026-03-02','Alpha Mart','APAC','USD',5400,'Chargeback',83,'U006','Card',1,1),
+    ('T008','2026-03-03','Beta Stores','APAC','USD',4114,'Captured',59,'U007','UPI',0,0),
+    ('T009','2026-03-03','Alpha Mart','APAC','USD',1512.5,'Captured',46,'U002','Wallet',0,0),
+    ('T010','2026-03-03','Beta Stores','APAC','USD',7381,'Captured',77,'U003','Card',1,1),
+    ('T011','2026-03-03','Alpha Mart','APAC','USD',2359.5,'Failed E05 Timeout',NULL,'U008','UPI',0,0),
+    ('T012','2026-03-04','Beta Stores','APAC','USD',3000,'Captured',61,'U009','Card',0,0),
+    ('T013','2026-03-04','Alpha Mart','APAC','USD',3720,'Captured',54,'U010','UPI',0,0),
+    ('T014','2026-03-04','Beta Stores','APAC','USD',5640,'Captured',73,'U001','NetBanking',1,1),
+    ('T015','2026-03-04','Alpha Mart','APAC','USD',1560,'Captured',52,'U002','Card',0,0),
+    ('T016','2026-03-05','Beta Stores','APAC','USD',2596,'Failed E05 Timeout',69,'U008','Card',0,0),
+    ('T017','2026-03-05','Beta Stores','APAC','USD',2124,'Failed E05 Timeout',72,'U008','Card',0,1),
+    ('T018','2026-03-05','Beta Stores','APAC','USD',1711,'Chargeback',86,'U008','UPI',0,1),
+    ('T019','2026-03-05','Alpha Mart','APAC','USD',3068,'Failed E05 Timeout',67,'U008','Wallet',0,0),
+    ('T020','2026-03-05','Alpha Mart','APAC','USD',6136,'Captured',75,'U005','UPI',1,1),
+    ('T021','2026-03-06','Beta Stores','APAC','USD',3927,'Captured',63,'U006','Card',0,0),
+    ('T022','2026-03-06','Alpha Mart','APAC','USD',4879,'Captured',60,'U007','UPI',0,0),
+    ('T023','2026-03-01','City Pharma','EU','USD',5616,'Captured',42,'U003','Card',0,0),
+    ('T024','2026-03-02','Eco Home','EU','USD',6649,'Chargeback',65,'U004','Card',1,0),
+    ('T025','2026-03-03','City Pharma','EU','USD',3024,'Captured',38,'U005','Wallet',0,0),
+    ('T026','2026-03-05','Eco Home','EU','USD',3597,'Failed E05 Timeout',44,'U006','NetBanking',0,0),
+    ('T027','2026-03-01','Delta Travels','US','USD',7200,'Captured',49,'U007','Card',1,0),
+    ('T028','2026-03-02','Delta Travels','US','USD',3100,'Captured',41,'U008','Card',0,0),
+    ('T029','2026-03-04','Delta Travels','US','USD',2500,'Chargeback',58,'U009','Wallet',0,0),
+    ('T030','2026-03-06','Delta Travels','US','USD',1800,'Failed E05 Timeout',47,'U010','UPI',0,0);
+
+---
+
+**Query #1**
+
+    #Query1 for Count transactions by Status
+    SELECT 
+        status,
+        COUNT(*) AS transaction_count
+    FROM transactions
+    GROUP BY status
+    ORDER BY transaction_count DESC;
+
+| status             | transaction_count |
+| ------------------ | ----------------- |
+| Captured           | 19                |
+| Failed E05 Timeout | 7                 |
+| Chargeback         | 4                 |
+
+---
+**Query #2**
+
+    #Query 2: Total captured GMV by merchant
+    SELECT 
+        merchant_name,
+        SUM(amount) AS total_amount
+    FROM transactions
+    GROUP BY merchant_name
+    ORDER BY total_amount DESC;
+
+| merchant_name | total_amount |
+| ------------- | ------------ |
+| Beta Stores   | 41782.0      |
+| Alpha Mart    | 40812.0      |
+| Delta Travels | 14600.0      |
+| Eco Home      | 10246.0      |
+| City Pharma   | 8640.0       |
+
+---
+**Query #3**
+
+    #Query 3: Show top 10 merchants by captured GMV
+    SELECT 
+        merchant_name,
+        SUM(amount) AS total_amount,
+        COUNT(*) AS total_transactions
+    FROM transactions
+    GROUP BY merchant_name
+    ORDER BY total_amount DESC
+    LIMIT 10;
+
+| merchant_name | total_amount | total_transactions |
+| ------------- | ------------ | ------------------ |
+| Beta Stores   | 41782.0      | 11                 |
+| Alpha Mart    | 40812.0      | 11                 |
+| Delta Travels | 14600.0      | 4                  |
+| Eco Home      | 10246.0      | 2                  |
+| City Pharma   | 8640.0       | 2                  |
+
+---
+**Query #4**
+
+    # Query 4: Show daily GMV and successful transaction count
+    SELECT 
+        transaction_date,
+        SUM(amount) AS daily_total_amount,
+        COUNT(CASE WHEN status = 'Captured' THEN 1 END) AS successful_transactions
+    FROM transactions
+    GROUP BY transaction_date
+    ORDER BY transaction_date ASC;
+
+| transaction_date | daily_total_amount | successful_transactions |
+| ---------------- | ------------------ | ----------------------- |
+| 2026-03-01       | 26382.0            | 5                       |
+| 2026-03-02       | 25049.0            | 3                       |
+| 2026-03-03       | 18391.0            | 4                       |
+| 2026-03-04       | 16420.0            | 4                       |
+| 2026-03-05       | 19232.0            | 1                       |
+| 2026-03-06       | 10606.0            | 2                       |
+
+---
+**Query #5**
+
+    #Query 5: Find merchants with chargeback ratio above 1%
+    SELECT 
+        merchant_name,
+        COUNT(*) AS total_transactions,
+        COUNT(CASE WHEN status = 'Chargeback' THEN 1 END) AS chargeback_count,
+        ROUND(
+            COUNT(CASE WHEN status = 'Chargeback' THEN 1 END) * 100.0 / COUNT(*), 
+        2) AS chargeback_ratio_pct
+    FROM transactions
+    GROUP BY merchant_name
+    HAVING chargeback_ratio_pct > 1
+    ORDER BY chargeback_ratio_pct DESC;
+
+| merchant_name | total_transactions | chargeback_count | chargeback_ratio_pct |
+| ------------- | ------------------ | ---------------- | -------------------- |
+| Eco Home      | 2                  | 1                | 50.0                 |
+| Delta Travels | 4                  | 1                | 25.0                 |
+| Beta Stores   | 11                 | 1                | 9.09                 |
+| Alpha Mart    | 11                 | 1                | 9.09                 |
+
+---
+**Query #6**
+
+    #Query 6: Find regions with average risk score above 50 and more than 20 transactions
+    SELECT 
+        default_region,
+        COUNT(*) AS total_transactions,
+        ROUND(AVG(risk_score), 2) AS avg_risk_score,
+        SUM(amount) AS total_amount
+    FROM transactions
+    WHERE risk_score IS NOT NULL
+    GROUP BY default_region
+    HAVING avg_risk_score > 50
+        AND total_transactions > 20
+    ORDER BY avg_risk_score DESC;
+
+| default_region | total_transactions | avg_risk_score | total_amount |
+| -------------- | ------------------ | -------------- | ------------ |
+| APAC           | 21                 | 65.48          | 80234.5      |
+
+---
+**Query #7**
+
+    #Query 7: Find users with 3 or more failed or chargeback transactions on the same day
+    SELECT 
+        user_id,
+        transaction_date,
+        COUNT(*) AS failed_chargeback_count,
+        SUM(amount) AS total_amount_at_risk,
+        GROUP_CONCAT(status) AS statuses
+    FROM transactions
+    WHERE status IN ('Failed E05 Timeout', 'Chargeback')
+    GROUP BY user_id, transaction_date
+    HAVING failed_chargeback_count >= 3
+    ORDER BY failed_chargeback_count DESC, transaction_date ASC;
+
+| user_id | transaction_date | failed_chargeback_count | total_amount_at_risk | statuses                                                            |
+| ------- | ---------------- | ----------------------- | -------------------- | ------------------------------------------------------------------- |
+| U008    | 2026-03-05       | 4                       | 9499.0               | Failed E05 Timeout,Failed E05 Timeout,Chargeback,Failed E05 Timeout |
+
+---
+**Query #8**
+
+    #Query 8: Show chargeback count, unique affected users, and chargeback amount by merchant
+    SELECT 
+        merchant_name,
+        COUNT(*) AS chargeback_count,
+        COUNT(DISTINCT user_id) AS unique_affected_users,
+        GROUP_CONCAT(DISTINCT user_id ORDER BY user_id ASC) AS affected_user_ids,
+        SUM(amount) AS total_chargeback_amount
+    FROM transactions
+    WHERE status = 'Chargeback'
+    GROUP BY merchant_name
+    ORDER BY total_chargeback_amount DESC;
+
+| merchant_name | chargeback_count | unique_affected_users | affected_user_ids | total_chargeback_amount |
+| ------------- | ---------------- | --------------------- | ----------------- | ----------------------- |
+| Eco Home      | 1                | 1                     | U004              | 6649.0                  |
+| Alpha Mart    | 1                | 1                     | U006              | 5400.0                  |
+| Delta Travels | 1                | 1                     | U009              | 2500.0                  |
+| Beta Stores   | 1                | 1                     | U008              | 1711.0                  |
+
+---
+
+[View on DB Fiddle](https://www.db-fiddle.com/f/6rMNMkk3wXRv6gjW642NGj/4)

@@ -1,0 +1,9 @@
+{
+    "total_ledger_records": 10,
+    "total_gateway_records": 9,
+    "missing_in_gateway": 2,
+    "missing_in_ledger": 1,
+    "amount_mismatches": 2,
+    "status_mismatches": 1,
+    "total_reconciliation_records": 11
+}

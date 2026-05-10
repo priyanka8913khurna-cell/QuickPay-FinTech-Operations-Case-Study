@@ -1,0 +1,4 @@
+region,total_transactions,total_amount_usd,avg_amount_usd,successful_transactions,failed_transactions,success_rate_%
+APAC,4,5640.0,1410.0,3,1,75.0
+EMEA,1,2100.0,2100.0,1,0,100.0
+US,5,15600.0,3120.0,5,0,100.0

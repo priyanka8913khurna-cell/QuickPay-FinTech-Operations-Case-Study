@@ -1,0 +1,29 @@
+# Spreadsheet Answers
+
+## Cleaning Steps
+
+Firstly, checked all the columns
+date column formatted
+Merchant name cleaned, as some columns contains lower case and some in upper case
+Currency converted to USD
+Status column also cleaned
+Risk Score column contained Integers along with somewhere Score and Risk was added in fornt of integers. Columns cleaned and made to integer only
+High value flag and high risk flag added
+
+## Standardization Rules: All the merchant names converted i.e. from "ALPHA MART" to "Alpha Mart" by using formula "Proper(Column)"
+## Lookup and Enrichment Logic:  By using v look 
+## Final Answers: 
+
+Total raw rows : 30
+Total cleaned rows : 30
+Invalid or missing rows handled: 9 in Region, same was filled from the file merchant master, however one column of risk Score is blank which was filled with :MISSING:
+Top region by GMV: APAC
+Number of high value transactions: 7
+Number of high risk transactions: 7
+Top merchant by captured GMV: Beta Stores
+
+## Formula Samples
+
+1. Proper(Trim(Cell)
+2. =IF(OR(AND(E2="APAC",H2>5000),AND(E2="EU",H2>6000),AND(E2="US",H2>7000)),1,0)
+3. =IF(OR(L2>=70,L2="Chargeback"),1,0) 

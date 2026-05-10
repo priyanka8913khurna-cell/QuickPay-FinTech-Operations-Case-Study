@@ -1,0 +1,3 @@
+transaction_id,transaction_date_ledger,merchant_id_ledger,amount_usd_ledger,status_ledger,payment_method_ledger,transaction_date_gateway,merchant_id_gateway,amount_usd_gateway,status_gateway,payment_method_gateway
+R002,01-03-2026,M002,850,success,Card,01-03-2026,M002,900,success,Card
+R008,04-03-2026,M001,640,success,Card,04-03-2026,M001,600,success,Card

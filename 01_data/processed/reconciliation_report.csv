@@ -1,0 +1,12 @@
+transaction_id,transaction_date_ledger,merchant_id_ledger,GMV,status_ledger,transaction_date_gateway,merchant_id_gateway,GMV,status_gateway,missing_in_ledger,missing_in_gateway,amount_mismatch,status_mismatch,recon_result
+R001,01-03-2026,M001,1200,success,01-03-2026,M001,1200,success,FALSE,FALSE,FALSE,FALSE,Matched
+R002,01-03-2026,M002,850,success,01-03-2026,M002,900,success,FALSE,FALSE,TRUE,FALSE,Amount mismatch
+R003,02-03-2026,M001,500,success,02-03-2026,M001,500,success,FALSE,FALSE,FALSE,FALSE,Matched
+R004,02-03-2026,M003,2100,success,,,,,FALSE,TRUE,FALSE,FALSE,Missing in gateway
+R005,03-03-2026,M004,7200,success,03-03-2026,M004,7200,failed,FALSE,FALSE,FALSE,TRUE,Status mismatch
+R006,03-03-2026,M002,950,success,03-03-2026,M002,950,success,FALSE,FALSE,FALSE,FALSE,Matched
+R007,04-03-2026,M005,3300,failed,04-03-2026,M005,3300,failed,FALSE,FALSE,FALSE,FALSE,Matched
+R008,04-03-2026,M001,640,success,04-03-2026,M001,600,success,FALSE,FALSE,TRUE,FALSE,Amount mismatch
+R009,05-03-2026,M002,4100,success,05-03-2026,M002,4100,success,FALSE,FALSE,FALSE,FALSE,Matched
+R010,05-03-2026,M004,2500,success,,,,,FALSE,TRUE,FALSE,FALSE,Missing in gateway
+R011,,,,,05-03-2026,M003,1800,success,TRUE,FALSE,FALSE,FALSE,Missing in ledger

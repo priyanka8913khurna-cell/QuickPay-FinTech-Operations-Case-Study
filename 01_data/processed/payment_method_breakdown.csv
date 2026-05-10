@@ -1,0 +1,5 @@
+payment_method,total_transactions,total_amount_usd,avg_amount_usd,successful_transactions,failed_transactions,success_rate_%
+Card,5,14890.0,2978.0,5,0,100.0
+NetBanking,1,3300.0,3300.0,0,1,0.0
+UPI,2,2150.0,1075.0,2,0,100.0
+Wallet,2,3000.0,1500.0,2,0,100.0
